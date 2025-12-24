@@ -1,0 +1,100 @@
+# Categorize MIT OCW playlists into 14 refined categories
+
+# Read the playlist file
+with open("mit_playlists.txt", "r", encoding="utf-8") as f:
+    playlists = [line.strip() for line in f if line.strip()]
+
+# Expanded categories with keywords
+categories = {
+    "Computer Science & Programming": [
+        "computer", "programming", "cs", "algorithms", "data", "software", "ai",
+        "machine learning", "cryptography", "python", "eecs", "computational",
+        "digital", "systems", "cyber", "security", "robotics", "signal", "computation",
+        "computer science", "information"
+    ],
+    "Mathematics & Statistics": [
+        "math", "calculus", "linear algebra", "differential", "statistics", "probability",
+        "matrix", "graph", "geometry", "analysis", "discrete", "number theory",
+        "mathematics", "combinatorics", "numerical", "optimization", "applied mathematics",
+        "multivariable", "real analysis", "complex variables"
+    ],
+    "Physics": [
+        "physics", "quantum", "mechanics", "thermodynamics", "optics", "electromagnetics",
+        "atomic", "nuclear", "particle", "astro", "relativity", "vibrations", "waves",
+        "field theory"
+    ],
+    "Chemistry": [
+        "chemistry", "chemical", "biochemistry", "solid-state", "spectroscopy", "molecular",
+        "laboratory", "thermodynamics", "kinetics"
+    ],
+    "Biology & Life Sciences": [
+        "biology", "life", "genetics", "neuroscience", "brain", "medicine", "cell",
+        "microbiology", "physiology", "biological", "health", "ecology", "environmental",
+        "biomedical"
+    ],
+    "Engineering & Technology": [
+        "engineering", "systems", "electronics", "control", "robotics", "aerospace",
+        "civil", "mechanical", "materials", "design", "signal processing", "manufacturing",
+        "industrial", "nanotechnology", "automation", "energy", "photovoltaics", "transport",
+        "lean", "six sigma"
+    ],
+    "Economics, Finance & Management": [
+        "economics", "finance", "business", "management", "microeconomics", "macroeconomics",
+        "industrial organization", "data analysis", "strategy", "supply chain",
+        "innovation", "entrepreneurship", "markets", "policy", "decision", "poker", "fintech"
+    ],
+    "Humanities, Social Sciences & Arts": [
+        "history", "philosophy", "psychology", "politics", "society", "culture",
+        "language", "linguistics", "music", "art", "media", "literature", "film",
+        "communication", "writing", "education", "anthropology", "calligraphy",
+        "creativity", "journalism", "seminar"
+    ],
+    "Environment, Climate & Sustainability": [
+        "climate", "energy", "sustainability", "environmental", "geothermal", "ocean",
+        "ecology", "green", "carbon", "renewable", "policy", "resources", "urban",
+        "transportation", "water", "diplomacy", "cities", "sustainable", "geographical information"
+    ],
+    "Mathematics for Computer Science / AI": [
+        "discrete", "probabilistic", "combinatorics", "matrix calculus", "optimization",
+        "algorithmic", "graph theory", "machine learning", "data analysis"
+    ],
+    "Music & Arts": [
+        "music", "composition", "jazz", "tonal", "improvisation", "film", "visual",
+        "writing", "creative", "photography", "media", "game design", "augmented reality"
+    ],
+    "Leadership, Policy & Social Impact": [
+        "leadership", "policy", "public sector", "justice", "social impact", "fairness",
+        "decision", "management", "venture", "executive", "innovation teams", "city visions",
+        "civic", "deliberative", "ethics", "community", "training"
+    ],
+    "Language & Cultural Studies": [
+        "language", "chinese", "japanese", "kanji", "creole", "asian", "translation",
+        "literature", "film", "culture", "history", "anthropology", "philology"
+    ],
+    "Miscellaneous / Uncategorised": []
+}
+
+# Prepare a dictionary to store categorized playlists
+categorized = {cat: [] for cat in categories}
+
+# Categorize playlists
+for playlist in playlists:
+    placed = False
+    title_lower = playlist.lower()
+    for cat, keywords in categories.items():
+        if any(kw in title_lower for kw in keywords):
+            categorized[cat].append(playlist)
+            placed = True
+            break
+    if not placed:
+        categorized["Miscellaneous / Uncategorised"].append(playlist)
+
+# Write the categorized playlists to a new text file
+with open("mit_playlists_categorized.txt", "w", encoding="utf-8") as f:
+    for cat, items in categorized.items():
+        f.write(f"=== {cat} ===\n")
+        for p in items:
+            f.write(f"{p}\n")
+        f.write("\n")
+
+print("Categorized playlist file saved as 'mit_playlists_categorized.txt'")
