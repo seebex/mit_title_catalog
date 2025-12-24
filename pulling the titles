@@ -1,0 +1,25 @@
+from googleapiclient.discovery import build
+API_KEY = "AIzaSyCiiMpQqQtMTm4DlveMIgi_U-wchkOakHs"
+CHANNEL_ID = "UCEBb1b_L6zDS3xTUrIALZOw"
+youtube = build("youtube", "v3", developerKey=API_KEY)
+playlists = []
+next_page_token = None
+while True:
+    request = youtube.playlists().list(
+        part="snippet",
+        channelId=CHANNEL_ID,
+        maxResults=50,
+        pageToken=next_page_token
+    )
+    response = request.execute()
+    for item in response["items"]:
+        title = item["snippet"]["title"]
+        playlists.append(title)
+    next_page_token = response.get("nextPageToken")
+    if not next_page_token:
+        break
+with open("mit_playlists.txt", "w", encoding="utf-8") as f:
+    for i, title in enumerate(playlists, 1):
+        f.write(f"{i}. {title}\n")
+print(f"Total playlists found: {len(playlists)}")
+print("Playlist titles saved to mit_playlists.txt")
